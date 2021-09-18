@@ -21,26 +21,6 @@ func (s *StubPlayerStore) RecordWin(name string) {
 	s.winCalls = append(s.winCalls, name)
 }
 
-func assertResponseBody(t testing.TB, got, want string) {
-	t.Helper()
-	if got != want {
-		t.Errorf("response body is wrong. Got %q, want %q", got, want)
-	}
-}
-
-func assertResponseStatus(t testing.TB, got, want int) {
-	t.Helper()
-
-	if got != want {
-		t.Errorf("response status is wrong. Got %d, want %d", got, want)
-	}
-}
-
-func getNewScoreRequest(name string) *http.Request {
-	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/players/%s", name), nil)
-	return req
-}
-
 func TestGETPlayers(t *testing.T) {
 	store := StubPlayerStore{
 		scores: map[string]int{
@@ -115,6 +95,26 @@ func TestScoreWins(t *testing.T) {
 			t.Errorf("Did not store correct winner. Got %q, want %q", store.winCalls[0], player)
 		}
 	})
+}
+
+func assertResponseBody(t testing.TB, got, want string) {
+	t.Helper()
+	if got != want {
+		t.Errorf("response body is wrong. Got %q, want %q", got, want)
+	}
+}
+
+func assertResponseStatus(t testing.TB, got, want int) {
+	t.Helper()
+
+	if got != want {
+		t.Errorf("response status is wrong. Got %d, want %d", got, want)
+	}
+}
+
+func getNewScoreRequest(name string) *http.Request {
+	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/players/%s", name), nil)
+	return req
 }
 
 func newPostWinRequest(name string) *http.Request {
